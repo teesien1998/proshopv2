@@ -1,6 +1,6 @@
 import { Spinner } from "react-bootstrap";
 
-const Loader = () => {
+const Loader = ({ marginY = "100px" }) => {
   return (
     <Spinner
       animation="border"
@@ -10,7 +10,7 @@ const Loader = () => {
         width: "100px", // Adjust the width
         height: "100px", // Adjust the height
         display: "block",
-        margin: "100px auto",
+        margin: `${marginY} auto`,
       }}
     />
   );

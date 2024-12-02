@@ -37,7 +37,7 @@ const PlaceOrderScreen = () => {
         totalPrice: cart.totalPrice,
       }).unwrap();
 
-      console.log("Response from createOrder:", res);
+      //console.log("Response from createOrder:", res);
       dispatch(clearCartItems());
       navigate(`/order/${res._id}`);
     } catch (err) {
@@ -86,7 +86,7 @@ const PlaceOrderScreen = () => {
                         </Col>
                         <Col md={4}>
                           {item.qty} x ${item.price} = $
-                          {(item.qty * item.price).toFixed(2)}
+                          {(item.qty * (item.price * 100)) / 100}
                         </Col>
                       </Row>
                     </ListGroup.Item>
@@ -129,9 +129,7 @@ const PlaceOrderScreen = () => {
               </ListGroup.Item>
               <ListGroup.Item>
                 {error && (
-                  <Message variant="danger">
-                    {error.data.message || error.error}
-                  </Message>
+                  <Message variant="danger">{error.data.message}</Message>
                 )}
                 <Button
                   type="button"
@@ -141,6 +139,7 @@ const PlaceOrderScreen = () => {
                 >
                   Place Order
                 </Button>
+                {isLoading && <Loader marginY={"50px"} />}
               </ListGroup.Item>
             </ListGroup>
           </Card>
