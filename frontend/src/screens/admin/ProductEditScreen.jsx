@@ -10,6 +10,7 @@ import {
   useUpdateProductMutation,
   useUploadProductImageMutation,
 } from "../../slices/productApiSlice";
+import Meta from "../../components/Meta";
 
 const ProductEditScreen = () => {
   const { id: productId } = useParams();
@@ -85,6 +86,7 @@ const ProductEditScreen = () => {
 
   return (
     <>
+      <Meta title="Product Edit | Admin" />
       <Link to="/admin/productlist" className="btn btn-light my-3">
         Go Back
       </Link>
@@ -127,9 +129,9 @@ const ProductEditScreen = () => {
                 onChange={(e) => setImage(e.target.value)}
               ></Form.Control>
               <Form.Control
-                type="file"
                 label="Choose File"
                 onChange={uploadFileHandler}
+                type="file"
               ></Form.Control>
               {loadingUpload && <Loader />}
             </Form.Group>

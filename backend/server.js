@@ -17,24 +17,11 @@ const port = process.env.PORT || 5000;
 
 const app = express();
 
-// Configure Multer
-const upload = multer();
-// Add multer middleware for form-data
-app.use(upload.none()); // This ensures that multer can handle form-data but without file uploads
-
 // Body parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // Cookie parser middleware
 app.use(cookieParser());
-
-// Middleware for serving static files
-const __dirname = path.resolve(); // Set __dirname to current directory
-app.use("/uploads", express.static(path.join(__dirname, "/uploads"))); // To serve static files like images directly to the client.
-
-app.get("/", (req, res) => {
-  res.send("API is running...");
-});
 
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
@@ -45,6 +32,25 @@ app.use("/api/upload", uploadRoutes);
 app.get("/api/config/paypal", (req, res) =>
   res.send({ clientId: process.env.PAYPAL_CLIENT_ID })
 );
+
+// Middleware for serving static files
+const __dirname = path.resolve(); // Set __dirname to current directory e.g. "C:\Users\Asus\Desktop\MERN Full Stack\proshop-v2"
+
+if (process.env.NODE_ENV === "production") {
+  // Set static folder
+  app.use(express.static(path.join(__dirname, "/frontend/build")));
+  app.use("/uploads", express.static("/var/data/uploads"));
+
+  // any route that is not api will be rediected to index.html
+  app.get("*", (req, res) =>
+    res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"))
+  );
+} else {
+  app.use("/uploads", express.static(path.join(__dirname, "/uploads"))); // To serve static files like images directly to the client.
+  app.get("/", (req, res) => {
+    res.send("API is running...");
+  });
+}
 
 // Error handling middleware
 app.use(notFound);

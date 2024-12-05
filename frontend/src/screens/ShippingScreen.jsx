@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { saveShippingAddress } from "../slices/cartSlice";
 import CheckOutSteps from "../components/CheckOutSteps";
 import FormContainer from "../components/FormContainer";
+import Meta from "../components/Meta";
 
 const ShippingScreen = () => {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ const ShippingScreen = () => {
 
   return (
     <FormContainer>
+      <Meta title="Shipping Details" />
       <CheckOutSteps step1 step2 />
       <h1>Shipping</h1>
       <Form onSubmit={submitHandler}>

@@ -20,6 +20,7 @@ import {
   useGetPaypalClientIdQuery,
   useDeliverOrderMutation,
 } from "../slices/orderApiSlice";
+import Meta from "../components/Meta";
 
 const OrderScreen = () => {
   const { id: orderId } = useParams();
@@ -127,6 +128,7 @@ const OrderScreen = () => {
     <Message variant="danger">{error?.data?.message}</Message>
   ) : (
     <>
+      <Meta title={`Order ${order._id}`} />
       <h1>Order {order._id}</h1>
       <Row>
         <Col md={8}>
