@@ -77,6 +77,7 @@ const ProductEditScreen = () => {
     console.log(formData);
     try {
       const res = await uploadProductImage(formData).unwrap();
+      console.log(res);
       toast.success(res.message);
       setImage(res.image);
     } catch (err) {
@@ -126,6 +127,7 @@ const ProductEditScreen = () => {
                 type="text"
                 placeholder="Enter Image URL"
                 value={image}
+                className="mb-2"
                 onChange={(e) => setImage(e.target.value)}
               ></Form.Control>
               <Form.Control

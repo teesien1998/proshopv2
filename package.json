@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "description": "eCommerece application bilt with the MERN stack",
   "type": "module",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "node backend/server.js",
     "server": "nodemon backend/server.js",

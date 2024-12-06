@@ -20,6 +20,8 @@ const ProductListScreen = () => {
     pageNumber,
   });
 
+  console.log(data);
+
   const [createProduct, { isLoading: loadingCreate }] =
     useCreateProductMutation();
 

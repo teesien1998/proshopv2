@@ -37,11 +37,14 @@ app.get("/api/config/paypal", (req, res) =>
 const __dirname = path.resolve(); // Set __dirname to current directory e.g. "C:\Users\Asus\Desktop\MERN Full Stack\proshop-v2"
 app.use("/uploads", express.static(path.join(__dirname, "/uploads"))); // To serve static files like images directly to the client.
 
+console.log(path.join(__dirname, "/frontend/build"));
+console.log(path.resolve(__dirname, "frontend", "build"));
+
 if (process.env.NODE_ENV === "production") {
-  // Set static folder
+  // Set React frontend app as static folder
   app.use(express.static(path.join(__dirname, "/frontend/build")));
 
-  // any route that is not api will be rediected to index.html
+  // Any route that is not api will be redirected to React's index.html
   app.get("*", (req, res) =>
     res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"))
   );

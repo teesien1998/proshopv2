@@ -35,7 +35,7 @@ const getProductByID = asyncHandler(async (req, res) => {
   if (product) {
     res.status(200).json(product);
   } else {
-    res.status(400);
+    res.status(404);
     throw new Error("Resource not found");
   }
 });
