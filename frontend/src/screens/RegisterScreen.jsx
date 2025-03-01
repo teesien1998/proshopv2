@@ -18,8 +18,8 @@ const RegisterScreen = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const [register, { isLoading }] = useRegisterMutation();
   const { userInfo } = useSelector((state) => state.auth);
+  const [register, { isLoading }] = useRegisterMutation();
 
   // Retrieve value of Query Params named "redirect", e.g /register?redirect=/shipping
   const { search } = useLocation();

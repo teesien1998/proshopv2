@@ -1,4 +1,5 @@
 import { LinkContainer } from "react-router-bootstrap";
+import { Link } from "react-router-dom";
 import { Table, Button } from "react-bootstrap";
 import Loader from "../../components/Loader";
 import { FaTimes } from "react-icons/fa";
@@ -20,9 +21,13 @@ const OrderListScreen = () => {
         <Message variant="danger">
           {error?.data?.message || error.error}
         </Message>
+      ) : orders.length === 0 ? (
+        <Message>
+          You dont have any Orders <Link to="/">Go Back</Link>
+        </Message>
       ) : (
         <>
-          <Table striped bordered hover responsive size="sm">
+          <Table striped hover responsive size="sm">
             <thead>
               <tr>
                 <th>ID</th>
@@ -56,7 +61,7 @@ const OrderListScreen = () => {
                     )}
                   </td>
                   <td>
-                    <LinkContainer to={`/order/${order._id}`}>
+                    <Link to={`/order/${order._id}`}>
                       <Button
                         type="button"
                         variant="success"
@@ -64,7 +69,7 @@ const OrderListScreen = () => {
                       >
                         Details
                       </Button>
-                    </LinkContainer>
+                    </Link>
                   </td>
                 </tr>
               ))}

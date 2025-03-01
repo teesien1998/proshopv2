@@ -44,6 +44,7 @@ const OrderScreen = () => {
   const [deliverOrder, { isLoading: loadingDeliver }] =
     useDeliverOrderMutation();
 
+  // Paypal Reducer Hook
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
   useEffect(() => {
@@ -77,10 +78,10 @@ const OrderScreen = () => {
 
       .then(async (details) => {
         try {
-          //console.log(details);
+          console.log(details);
           await payOrder({ orderId, details });
-
           refetch();
+
           toast.success("Payment Successful");
         } catch (err) {
           toast.error(err?.data?.message || error.error);
@@ -104,6 +105,7 @@ const OrderScreen = () => {
         ],
       })
       .then((orderID) => {
+        console.log(orderID);
         return orderID;
       });
   };
@@ -212,25 +214,25 @@ const OrderScreen = () => {
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Items</Col>
+                  <Col className="fw-medium">Items</Col>
                   <Col>${order.itemsPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Shipping</Col>
+                  <Col className="fw-medium">Shipping:</Col>
                   <Col>${order.shippingPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Tax</Col>
+                  <Col className="fw-medium">Tax:</Col>
                   <Col>${order.taxPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Total</Col>
+                  <Col className="fw-medium">Total:</Col>
                   <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>

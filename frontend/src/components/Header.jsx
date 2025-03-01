@@ -11,11 +11,10 @@ import logo from "../assets/logo.png";
 import { resetCart } from "../slices/cartSlice";
 
 const Header = () => {
+  const navigate = useNavigate();
   const { cartItems } = useSelector((state) => state.cart);
   const { userInfo } = useSelector((state) => state.auth);
-
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [logoutApiCall] = useLogoutMutation();
 
   const logoutHandler = async () => {
@@ -45,7 +44,7 @@ const Header = () => {
               <SearchBox />
               <LinkContainer to="/cart">
                 <Nav.Link>
-                  <FaShoppingCart /> Cart
+                  <FaShoppingCart style={{ marginRight: "3px" }} /> Cart
                   {cartItems.length > 0 && (
                     <Badge pill bg="success" style={{ marginLeft: "5px" }}>
                       {cartItems.reduce((acc, item) => acc + item.qty, 0)}
@@ -66,7 +65,7 @@ const Header = () => {
               ) : (
                 <LinkContainer to="/login">
                   <Nav.Link>
-                    <FaUser />
+                    <FaUser style={{ marginRight: "3px" }} />
                     Sign In
                   </Nav.Link>
                 </LinkContainer>

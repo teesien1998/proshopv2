@@ -11,7 +11,7 @@ import uploadRoutes from "./routes/uploadRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 dotenv.config();
-connectDB();
+await connectDB();
 
 const port = process.env.PORT || 5000;
 
@@ -36,9 +36,6 @@ app.get("/api/config/paypal", (req, res) =>
 // Middleware for serving static files
 const __dirname = path.resolve(); // Set __dirname to current directory e.g. "C:\Users\Asus\Desktop\MERN Full Stack\proshop-v2"
 app.use("/uploads", express.static(path.join(__dirname, "/uploads"))); // To serve static files like images directly to the client.
-
-console.log(path.join(__dirname, "/frontend/build"));
-console.log(path.resolve(__dirname, "frontend", "build"));
 
 if (process.env.NODE_ENV === "production") {
   // Set React frontend app as static folder

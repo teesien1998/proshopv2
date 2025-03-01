@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/Loader";
@@ -17,8 +22,8 @@ const LoginScreen = () => {
 
   // Redux Toolkit Setup: setCredentials, login, userInfo
   const dispatch = useDispatch();
-  const [login, { isLoading }] = useLoginMutation();
   const { userInfo } = useSelector((state) => state.auth);
+  const [login, { isLoading }] = useLoginMutation();
 
   // Retrieve value of Query Params named "redirect", e.g /login?redirect=/shipping
   const { search } = useLocation();
@@ -37,6 +42,7 @@ const LoginScreen = () => {
     try {
       // Login Mutation Redux
       const res = await login({ email, password }).unwrap();
+
       // Dispatch setCredential Action, save the 'userInfo' on localsotrage & Redux store state
       dispatch(setCredentials({ ...res }));
       navigate(redirect);

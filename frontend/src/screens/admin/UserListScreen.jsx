@@ -40,7 +40,7 @@ const UserListScreen = () => {
           {error?.data?.message || error.error}
         </Message>
       ) : (
-        <Table striped bordered hover responsive size="sm">
+        <Table striped hover responsive size="sm">
           <thead>
             <tr>
               <th>ID</th>

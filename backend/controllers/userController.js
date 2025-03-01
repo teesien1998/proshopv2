@@ -102,13 +102,16 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
   if (user) {
+    // Have to check req.body.email !== user.email or else it will check the same user's email from the database
     if (req.body.email && req.body.email !== user.email) {
       const emailExists = await User.findOne({ email: req.body.email });
+
       if (emailExists) {
         res.status(400);
         throw new Error("Email already exists. Please try with another email");
       }
     }
+    console.log(req.body);
 
     // Update the user's profile
     user.name = req.body.name || user.name;

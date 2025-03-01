@@ -22,6 +22,7 @@ import Loader from "../components/Loader";
 import Message from "../components/Message";
 import Meta from "../components/Meta";
 import { addToCart } from "../slices/cartSlice";
+import { FaStar } from "react-icons/fa";
 
 const ProductScreen = () => {
   const { id: productId } = useParams();
@@ -184,7 +185,7 @@ const ProductScreen = () => {
               {product.reviews.length === 0 && <Message>No Reviews</Message>}
               <ListGroup variant="flush">
                 {product.reviews.map((review) => (
-                  <ListGroup.Item>
+                  <ListGroup.Item key={review._id}>
                     <strong>{review.name}</strong>
                     <Rating value={review.rating}></Rating>
                     <p>{review.createdAt.substring(0, 10)}</p>
@@ -198,19 +199,17 @@ const ProductScreen = () => {
                     <Form onSubmit={submitHandler}>
                       <Form.Group controlId="rating">
                         <Form.Label>Rating</Form.Label>
-                        <Form.Control
-                          as="select"
-                          required
-                          value={rating}
-                          onChange={(e) => setRating(e.target.value)}
-                        >
-                          <option value="">Select...</option>
-                          <option value="1">1 - Poor</option>
-                          <option value="2">2 - Fair</option>
-                          <option value="3">3 - Good</option>
-                          <option value="4">4 - Very Good</option>
-                          <option value="5">5 - Excellent</option>
-                        </Form.Control>
+                        <div>
+                          {[...Array(5)].map((_, index) => (
+                            <FaStar
+                              key={index}
+                              onClick={() => setRating(index + 1)}
+                              color={index < rating ? "#ffcc33" : "#b0b0b0"}
+                              size={30}
+                              style={{ cursor: "pointer", marginRight: "5px" }}
+                            />
+                          ))}
+                        </div>
                       </Form.Group>
                       <Form.Group className="my-2" controlId="comment">
                         <Form.Label>Comment</Form.Label>

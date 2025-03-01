@@ -40,6 +40,7 @@ const HomeScreen = () => {
       ) : (
         <ProductCarousel />
       )}
+
       {isLoading ? (
         <Loader />
       ) : error ? (

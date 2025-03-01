@@ -13,12 +13,17 @@ import Meta from "../components/Meta";
 const PlaceOrderScreen = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const cart = useSelector((state) => state.cart);
 
   const [createOrder, { isLoading, error }] = useCreateOrderMutation();
 
+  // if (!cart.shippingAddress) {
+  //   console.log("go to shipping");
+  // }
+
   useEffect(() => {
-    if (!cart.shippingAddress) {
+    if (!cart?.shippingAddress) {
       navigate("/shipping");
     } else if (!cart.paymentMethod) {
       navigate("/payment");
@@ -57,9 +62,9 @@ const PlaceOrderScreen = () => {
               <h2>Shipping</h2>
               <p>
                 <strong>Address: </strong>
-                {cart.shippingAddress.address}, {cart.shippingAddress.city}{" "}
-                {cart.shippingAddress.postalCode},{" "}
-                {cart.shippingAddress.country}
+                {cart?.shippingAddress?.address}, {cart?.shippingAddress?.city}{" "}
+                {cart?.shippingAddress?.postalCode},{" "}
+                {cart?.shippingAddress?.country}
               </p>
             </ListGroup.Item>
 
@@ -105,26 +110,26 @@ const PlaceOrderScreen = () => {
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Items:</Col>
+                  <Col className="fw-medium">Items:</Col>
                   <Col>{cart.itemsPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Shipping:</Col>
+                  <Col className="fw-medium">Shipping:</Col>
                   <Col>{cart.shippingPrice}</Col>
                 </Row>
               </ListGroup.Item>
 
               <ListGroup.Item>
                 <Row>
-                  <Col>Tax Price:</Col>
+                  <Col className="fw-medium">Tax Price:</Col>
                   <Col>{cart.taxPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
-                  <Col>Total:</Col>
+                  <Col className="fw-medium">Total:</Col>
                   <Col>{cart.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>

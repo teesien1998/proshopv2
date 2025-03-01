@@ -1,4 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+// import { useGetMyOrdersQuery } from "./orderApiSlice";
+
+// const { data, isLoading, error, refetch } = useGetMyOrdersQuery();
 
 const initialState = {
   userInfo: localStorage.getItem("userInfo")
@@ -15,7 +18,7 @@ const authSlice = createSlice({
       localStorage.setItem("userInfo", JSON.stringify(action.payload));
     },
     logout: (state, action) => {
-      state.userInfo = null;
+      state.userInfo = null;    
       // localStorage.removeItem("userInfo");
       localStorage.clear(); // Clear all the localstorage data, e.g. cart, shipping & userInfo
     },

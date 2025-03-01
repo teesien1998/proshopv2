@@ -51,7 +51,12 @@ const CartScreen = () => {
                     <Image src={item.image} alt={item.name} fluid rounded />
                   </Col>
                   <Col md={3} className="mb-3">
-                    <Link to={`/product/${item._id}`}>{item.name}</Link>
+                    <Link
+                      to={`/product/${item._id}`}
+                      className="text-decoration-none"
+                    >
+                      <strong>{item.name}</strong>
+                    </Link>
                   </Col>
                   <Col md={2} className="mb-3">
                     ${item.price}
@@ -95,7 +100,7 @@ const CartScreen = () => {
                 Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
                 items
               </h2>
-              <h5 className="mb-0">${itemsPrice}</h5>
+              <h5 className="mb-0">${itemsPrice ? itemsPrice : "0"}</h5>
             </ListGroup.Item>
             <ListGroup.Item>
               <Button

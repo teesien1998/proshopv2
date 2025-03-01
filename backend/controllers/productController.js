@@ -9,10 +9,22 @@ const getProducts = asyncHandler(async (req, res) => {
   const pageSize = process.env.PAGINATION_LIMIT;
   const currentPage = Number(req.query.pageNumber) || 1; // Query Params is String by default, remember to convert the Query Params to Number
 
-  const keyword = req.query.keyword
-    ? { name: { $regex: req.query.keyword, $options: "i" } }
-    : {};
+  // const keyword = req.query.keyword
+  //   ? { name: { $regex: req.query.keyword, $options: "i" } }
+  //   : {};
+  let keyword = {}; // Default empty filter
 
+  if (req.query.keyword) {
+    const locationPattern = new RegExp(req.query.keyword.trim(), "i");
+
+    keyword = {
+      $or: [
+        { name: locationPattern },
+        { brand: locationPattern },
+        { category: locationPattern },
+      ],
+    };
+  }
   const count = await Product.countDocuments({ ...keyword }); // Count the number of the Product data, limited by 'keyword'
 
   const products = await Product.find({ ...keyword })
@@ -94,7 +106,6 @@ const deleteProduct = asyncHandler(async (req, res) => {
 
   if (product) {
     await Product.deleteOne({ _id: product._id });
-
     res.status(200).json({ message: "Product Deleted Successfully" });
   } else {
     res.status(404);
@@ -103,7 +114,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 });
 
 // @desc    Create a new review
-// @route   DELETE /api/products/:id/reviews
+// @route   POST /api/products/:id/reviews
 // @access  Private
 const createProductReview = asyncHandler(async (req, res) => {
   const { rating, comment } = req.body;
@@ -112,12 +123,12 @@ const createProductReview = asyncHandler(async (req, res) => {
 
   if (product) {
     const alreadyReviewed = product.reviews.find(
-      (review) => review.user.toString() === req.user_id.toString()
+      (review) => review.user.toString() === req.user._id.toString() // User Id in the MongoDB is Object ID and has to be convert to String
     );
 
     if (alreadyReviewed) {
       res.status(400);
-      throw new Error("Product alresdy reviewed");
+      throw new Error("Product already reviewed");
     }
 
     const review = {

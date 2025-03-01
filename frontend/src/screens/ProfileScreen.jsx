@@ -8,8 +8,11 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { useProfileMutation } from "../slices/userApiSlice";
 import { setCredentials } from "../slices/authSlice";
-import { useGetMyOrdersQuery } from "../slices/orderApiSlice";
-import { FaTimes } from "react-icons/fa";
+import {
+  useGetMyOrdersQuery,
+  useDeleteOrderMutation,
+} from "../slices/orderApiSlice";
+import { FaTimes, FaTrash } from "react-icons/fa";
 import Meta from "../components/Meta";
 
 const ProfileScreen = () => {
@@ -24,9 +27,8 @@ const ProfileScreen = () => {
   const [updateProfile, { isLoading: loadingUpdateProfile }] =
     useProfileMutation();
 
-  const { data: orders, isLoading, error } = useGetMyOrdersQuery();
-
-  console.log(orders);
+  const { data: orders, isLoading, error, refetch } = useGetMyOrdersQuery();
+  const [deleteOrder, { isLoading: loadingDelete }] = useDeleteOrderMutation();
 
   // When first load the page, auto set the state for the name and email
   useEffect(() => {
@@ -39,19 +41,41 @@ const ProfileScreen = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    if (password !== confirmPassword) {
-      toast.error("Password do not match");
-    } else {
-      try {
-        const res = await updateProfile({
-          _id: userInfo._id,
-          name,
-          email,
-          password,
-        }).unwrap();
+    // Check if only one of the fields is filled
+    if ((password && !confirmPassword) || (!password && confirmPassword)) {
+      toast.error("Please fill in both Password and Confirm Password fields");
+      return;
+    }
 
-        dispatch(setCredentials(res));
-        toast.success("Profile Updated Successfully");
+    // Check if passwords do not match
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    try {
+      const res = await updateProfile({
+        _id: userInfo._id, // Can ignore the userInfo._id
+        name,
+        email,
+        password,
+      }).unwrap();
+
+      dispatch(setCredentials(res));
+      toast.success("Profile Updated Successfully");
+    } catch (err) {
+      // console.log(err);
+      toast.error(err?.data?.message || err.error);
+    }
+  };
+
+  const deleteHandler = async (orderId) => {
+    console.log("delete", orderId);
+    if (window.confirm("Are you sure you want to delete the order? ")) {
+      try {
+        await deleteOrder(orderId);
+        toast.success("Order Deleted Successfully");
+        refetch();
       } catch (err) {
         toast.error(err?.data?.message || err.error);
       }
@@ -108,6 +132,7 @@ const ProfileScreen = () => {
       </Col>
       <Col md={9}>
         <h2>My Orders</h2>
+        {loadingDelete && <Loader />}
         {isLoading ? (
           <Loader />
         ) : error ? (
@@ -117,7 +142,7 @@ const ProfileScreen = () => {
         ) : orders?.length === 0 ? (
           <Message>Your Order is empty</Message>
         ) : (
-          <Table striped bordered table hover responsive className="table-sm">
+          <Table striped table hover responsive className="table-sm">
             <thead>
               <tr>
                 <th>ID</th>
@@ -149,9 +174,22 @@ const ProfileScreen = () => {
                     )}
                   </td>
                   <td>
-                    <LinkContainer to={`/order/${order._id}`}>
-                      <Link className="btn btn-sm btn-success">Details</Link>
-                    </LinkContainer>
+                    <Link
+                      to={`/order/${order._id}`}
+                      className="btn btn-sm btn-success me-2"
+                    >
+                      Details
+                    </Link>
+
+                    <Button
+                      type="button"
+                      variant="danger"
+                      className="btn-sm "
+                      onClick={() => deleteHandler(order._id)}
+                      disabled={order.isPaid}
+                    >
+                      <FaTrash style={{ color: "white" }} />
+                    </Button>
                   </td>
                 </tr>
               ))}
